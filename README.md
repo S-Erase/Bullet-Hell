@@ -1,7 +1,7 @@
 # Circles of Hell (WIP)
 
 ## Introduction
-This is a work in progress web game I am creating to get myself acquainted with Javascript, its rules, and its conventions as an interpreted language.
+This is a work in progress web game I recently started creating to get myself acquainted with Javascript, its rules, and its conventions as an interpreted language.
 
 The game is a simple shooter. All you need to do is make it to the end without dying.
 
