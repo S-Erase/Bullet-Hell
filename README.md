@@ -1,4 +1,4 @@
-# Circles of Hell
+# Circles of Hell (WIP)
 
 ## Introduction
 This is a work in progress web game I am creating to get myself acquainted with Javascript, its rules, and its conventions as an interpreted language.
