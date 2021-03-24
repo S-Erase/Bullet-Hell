@@ -50,7 +50,7 @@ export class EnemyBullet0{
         this.outline = col1;
         this.lifeStage = lifeStage.birth;
         this.delete = false;
-        this.birthFrame = game.level.phase.time;
+        this.birthFrame = game.level.levelTime;
         this.birthPhase = 10;
         this.deathFrame = null;
         this.ai = new BulletAIDefault(this);
@@ -61,13 +61,13 @@ export class EnemyBullet0{
             this.ai.update();
 
             if(this.lifeStage == lifeStage.birth){
-                let life = this.game.level.phase.time - this.birthFrame;
+                let life = this.game.level.levelTime - this.birthFrame;
                 if(life >= this.birthPhase)
                 this.lifeStage = lifeStage.life;
             }
         }
         else{
-            let life = this.game.level.phase.time - this.deathFrame;
+            let life = this.game.level.levelTime - this.deathFrame;
             this.body.y -= (10-life)/10;
             if(life >= 10)
             this.delete = true;
@@ -78,12 +78,12 @@ export class EnemyBullet0{
         let drawRadius = this.body.radius+3;
         let drawOpacity = 1;
         if(this.lifeStage == lifeStage.birth){
-            let life = this.game.level.phase.time - this.birthFrame;
+            let life = this.game.level.levelTime - this.birthFrame;
             drawRadius *= easeIn(2,1,life/this.birthPhase);
             drawOpacity = easeIn(0,1,life/this.birthPhase);;
         }
         else if(this.lifeStage == lifeStage.dying){
-            let life = this.game.level.phase.time - this.deathFrame;
+            let life = this.game.level.levelTime - this.deathFrame;
             drawRadius *= lErp(1,3,life/10);
             drawOpacity = lErp(1,0,life/10);;
         }
@@ -97,4 +97,11 @@ export class EnemyBullet0{
 		ctx.strokeStyle = this.outline;
 		ctx.stroke();
     }
+}
+
+export function deleteAllBullets(game){
+    game.enemybullets.forEach(obj => {
+        obj.lifeStage = lifeStage.dying;
+        obj.deathFrame = game.level.levelTime;
+    });
 }

@@ -1,6 +1,6 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "./screen.js";
 import * as mth from "/src/math.js";
-import { PlayerBullet, lifeStage } from "./bullet.js";
+import { PlayerBullet, deleteAllBullets } from "./bullet.js";
 import { star, heart } from "./shapes.js";
 import Circle from "./circle.js";
 
@@ -101,10 +101,7 @@ export default class Player{
             this.game.deathFrame = this.game.gameFrame;
         }
         this.lives--;
-        this.game.enemybullets.forEach(obj => {
-            obj.lifeStage = lifeStage.dying;
-            obj.deathFrame = this.game.level.phase.time;
-        });
+        deleteAllBullets(this.game);
         this.body.x = SCREEN_WIDTH/2;
         this.body.y = SCREEN_HEIGHT-30;
     }

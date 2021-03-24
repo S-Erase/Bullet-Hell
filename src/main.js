@@ -1,5 +1,8 @@
 import Game, {gameState} from "./game.js";
 import { PauseMenu } from "./menu.js";
+import BossPhase0_2 from "./Level/Phases/Boss Phases/bossphase0_2.js";
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
+import { deleteAllBullets } from "./bullet.js";
 
 var game = new Game();
 
@@ -17,6 +20,19 @@ var keyCodes = {
 }
 
 function HandleEvents(){
+	/*document.addEventListener("keypress", function(event){
+		switch(game.state){
+			case gameState.Running:
+				if(event.key == 'c')
+				{
+					deleteAllBullets(game);
+					game.level.phase = new BossPhase0_2(game);
+					game.boss.body.x = SCREEN_WIDTH/2;
+					game.boss.body.y = 200;
+				}
+				break;
+		}
+	});*/
 	document.addEventListener("keydown", function(event){
 		switch(game.state){
 			case gameState.Intro:

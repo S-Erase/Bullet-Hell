@@ -1,6 +1,6 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import { EnemyBullet0 } from "/src/bullet.js";
+import { EnemyBullet0, deleteAllBullets } from "/src/bullet.js";
 import BossPhase0_1 from "./bossphase0_1.js";
 
 export default class BossPhase0_0{
@@ -13,7 +13,7 @@ export default class BossPhase0_0{
     update(){
         this.time++;
         if(this.boss.health < 2800){
-            this.game.enemybullets.length = 0;
+            deleteAllBullets(this.game);
             this.game.level.phase = new BossPhase0_1(this.game);
             return;
         }
@@ -37,24 +37,16 @@ export default class BossPhase0_0{
         if(total < 6*20){
             for(let i = 0; i < 20; i++){
                 if(total==6*i){
-                    if(this.boss.health > 0){
-                        for(let j = 0; j < 24; j++){
-                            this.game.enemybullets.push(new EnemyBullet0(this.game, 
-                                this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/12),
-                                this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/12),
-                                (1+i), this.ang+j*Math.PI/12,
-                                "#600","#f00",10));
-                        }
-                    }
-                    else{
-                        break;
+                    for(let j = 0; j < 24; j++){
+                        this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                            this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/12),
+                            this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/12),
+                            (1+i), this.ang+j*Math.PI/12,
+                            "#600","#f00",10));
                     }
                 }
             }
-        }
-        
-        if(total==6*19){
-            if(this.boss.health > 0){
+            if(total==6*19){
                 for(let i = 0; i < 15; i++){
                     for(let j = 0; j < 24; j++){
                         this.game.enemybullets.push(new EnemyBullet0(this.game, 
@@ -65,23 +57,22 @@ export default class BossPhase0_0{
                     }
                 }
             }
+            return;
         }
-
         if(total > 6*30){
             if(Math.floor(total/20)-Math.floor((total-1)/20)){
-                if(this.boss.health > 0){
-                    for(let i = 0; i < 5; i++){
-                        for(let j = 0; j < 5; j++){
-                            this.game.enemybullets.push(new EnemyBullet0(this.game, 
-                            this.boss.body.x + 20*Math.cos(this.ang+2*i*Math.PI/5),
-                            this.boss.body.y + 20*Math.sin(this.ang+2*i*Math.PI/5),
-                            1+2*j/3, this.ang+2*i*Math.PI/5,
-                            "#fff",`hsl(${72*i},100%,50%)`));
-                        }
+                for(let i = 0; i < 5; i++){
+                    for(let j = 0; j < 5; j++){
+                        this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                        this.boss.body.x + 20*Math.cos(this.ang+2*i*Math.PI/5),
+                        this.boss.body.y + 20*Math.sin(this.ang+2*i*Math.PI/5),
+                        1+2*j/3, this.ang+2*i*Math.PI/5,
+                        "#fff",`hsl(${72*i},100%,50%)`));
                     }
-                    this.ang+=1;
                 }
+                this.ang+=1;
             }
+            return;
         }
     }
 }

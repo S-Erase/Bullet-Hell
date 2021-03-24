@@ -11,6 +11,7 @@ export default class Level0{
     }
     update(){
         this.levelTime++;
+        if(this.phase !== null)
         this.phase.update();
     }
 }
