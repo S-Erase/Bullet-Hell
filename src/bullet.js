@@ -18,7 +18,7 @@ export class PlayerBullet{
         else if (this.body.x < -this.body.radius){this.delete = true;}
         else if (this.body.y > SCREEN_HEIGHT+this.body.radius){this.delete = true;}
         else if (this.body.x > SCREEN_WIDTH+this.body.radius){this.delete = true;}
-        else{
+        else if (this.game.boss !== null){
             if(doCirclesIntersect(this.body, this.game.boss.body)){
                 this.delete = true;
                 if(this.game.boss.health > 0)

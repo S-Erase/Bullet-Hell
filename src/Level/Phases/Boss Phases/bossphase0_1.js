@@ -7,21 +7,25 @@ import BossPhase0_2 from "./bossphase0_2.js";
 export default class BossPhase0_1{
     constructor(game){
         this.game = game;
-        this.boss = game.boss;
+        this.nextPhase = new BossPhase0_2(this.game);
+
         this.time = -60;
         this.ang = mth.randomUniform(0,Math.PI/5);
         this.dir = 1;
-
+    }
+    init(){
+        this.game.level.phase = this;
+        this.boss = this.game.boss;
         this.start = {
-            x: this.boss.body.x,
-            y: this.boss.body.y,
+            x: this.game.boss.body.x,
+            y: this.game.boss.body.y,
         };
     }
     update(){
         this.time++;
         if(this.boss.health < 2100){
             deleteAllBullets(this.game);
-            this.game.level.phase = new BossPhase0_2(this.game);
+            this.nextPhase.init();
             return;
         }
         this.updateBoss(this.time);

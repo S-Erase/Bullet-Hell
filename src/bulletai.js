@@ -59,19 +59,20 @@ export class BulletAISlowCurve{
     }
 }
 
-export class BulletAISlowHoming{
-    constructor(bullet,angd,slowvel){
+export class BulletAIAccelerate{
+    constructor(bullet,endvel,time){
         this.bullet = bullet;
         this.game = bullet.game;
         this.startVel = Math.sqrt(this.bullet.vx**2 + this.bullet.vy**2);
+        this.newVel = endvel;
         this.vel = Math.sqrt(this.bullet.vx**2 + this.bullet.vy**2);
-        this.slowVel = slowvel;
-        this.ang = mth.angleAtoB(bullet.body, this.game.player.body) + angd;
+        this.ang = Math.atan2(bullet.vy,bullet.vx);
+        this.time = time;
     }
     update(){
         let life = this.game.level.levelTime-this.bullet.birthFrame;
-        if(life < 30){
-            this.vel = mth.easeIn(this.startVel,this.slowVel,life/30);
+        if(life < this.time){
+            this.vel = mth.easeIn(this.startVel,this.newVel,life/this.time);
         }
 
         this.bullet.vx = this.vel*Math.cos(this.ang);

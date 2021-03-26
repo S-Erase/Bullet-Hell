@@ -1,26 +1,27 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
 import { EnemyBullet0 } from "/src/bullet.js";
-import { BulletAISlowCurve, BulletAISlowHoming } from "/src/bulletai.js";
+import { BulletAIAccelerate } from "/src/bulletai.js";
 
 export default class BossPhase0_1{
     constructor(game){
         this.game = game;
-        this.boss = game.boss;
+        this.nextPhase = null;
+
         this.time = -130;
         this.ang = mth.randomUniform(0,Math.PI/5);
         this.dir = 1;
 
-        this.start = {
-            x: this.boss.body.x,
-            y: this.boss.body.y,
-        };
+    }
+    init(){
+        this.game.level.phase = this;
+        this.boss = this.game.boss;
     }
     update(){
         this.time++;
         if(this.boss.health < 0){
             deleteAllBullets(this.game);
-            this.game.level.phase = null;
+            //this.nextPhase.init();
             return;
         }
         this.updateBoss(this.time);
@@ -53,9 +54,9 @@ export default class BossPhase0_1{
                 for(let j = 0; j < 18; j++){
                     let bullet = new EnemyBullet0(this.game, 
                         this.boss.body.x, this.boss.body.y,
-                        25, 0,
+                        25, mth.angleAtoB(this.game.boss.body,this.game.player.body)+j*Math.PI/9,
                         "#060","#0f0",10);
-                    bullet.ai = new BulletAISlowHoming(bullet,j*Math.PI/9,2);
+                    bullet.ai = new BulletAIAccelerate(bullet,2,30);
                     this.game.enemybullets.push(bullet);
                 }
             }

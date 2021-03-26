@@ -11,6 +11,7 @@ export default class Player{
 		this.body = new Circle(SCREEN_WIDTH/2, SCREEN_HEIGHT-30, 8);
         this.lives = 2;
         this.spell = 2;
+        this.spellDelay = 0;
 
         this.slow = false;
         this.shooting = false;
@@ -61,6 +62,7 @@ export default class Player{
                 this.game.playerbullets.push(new PlayerBullet(this.game,-9-2*this.betweenSlowAndFast,3,-Math.PI/2-0.05*this.betweenSlowAndFast));
             }
             this.shotDelay--;
+            this.spellDelay--;
         }
 	}
 	drawPlayer(){

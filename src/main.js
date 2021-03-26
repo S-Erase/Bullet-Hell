@@ -20,19 +20,6 @@ var keyCodes = {
 }
 
 function HandleEvents(){
-	/*document.addEventListener("keypress", function(event){
-		switch(game.state){
-			case gameState.Running:
-				if(event.key == 'c')
-				{
-					deleteAllBullets(game);
-					game.level.phase = new BossPhase0_2(game);
-					game.boss.body.x = SCREEN_WIDTH/2;
-					game.boss.body.y = 200;
-				}
-				break;
-		}
-	});*/
 	document.addEventListener("keydown", function(event){
 		switch(game.state){
 			case gameState.Intro:
@@ -59,6 +46,13 @@ function HandleEvents(){
 				game.player.moveData.d = 1;
 				if(event.keyCode == keyCodes.Z) //z
 				game.player.shooting = true;
+				if(event.keyCode == keyCodes.X){
+					if(game.player.spell && game.player.spellDelay<=0){
+						deleteAllBullets(game);
+						game.player.spell--;
+						game.player.spellDelay = 2;
+					}
+				}
 				if(event.keyCode == keyCodes.lShift) //lshift
 				game.player.slow = true;
 				break;
