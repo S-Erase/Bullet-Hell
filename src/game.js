@@ -16,8 +16,9 @@ export default class Game{
     constructor(){
         this.player = new Player(this);
         this.playerbullets = [];
-        this.boss = null;
+
         this.enemybullets = [];
+
         this.state = gameState.Intro;
 
         this.level = null;
@@ -52,20 +53,21 @@ export default class Game{
         //Background
         ctx.fillStyle = "#222";
         ctx.fillRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-        if(this.boss !== null)
-        this.boss.drawGrid();
+        if(this.level !== null && this.level.boss.active)
+        this.level.boss.drawGrid();
 
         //Game objects
         this.player.drawPlayer();
-        if(this.boss !== null)
-        this.boss.drawBoss();
+        if(this.level !== null && this.level.boss.active)
+        this.level.boss.drawBoss();
         this.playerbullets.forEach(obj => obj.draw());
+
         this.enemybullets.forEach(obj => obj.draw());
 
         //UI
         ctx.globalAlpha = 1;
-        if(this.boss !== null)
-        this.boss.drawHealth();
+        if(this.level !== null && this.level.boss.active)
+        this.level.boss.drawHealth();
         this.player.drawLives();
         this.player.drawSpell();
 
@@ -75,19 +77,17 @@ export default class Game{
     restartLevel(){
         this.player.reset();
         this.playerbullets.length = 0;
-        this.boss = null;
         this.enemybullets.length = 0;
         this.state = gameState.Running;
         this.level = new Level0(this);
+        this.level.init();
         this.menu = null;
         this.gameFrame = 0;
         this.deathFrame = undefined;
     }
     restartGame(){
-        console.log("1");
         this.player.reset();
         this.playerbullets.length = 0;
-        this.boss = null;
         this.enemybullets.length = 0;
         this.state = gameState.Intro;
         this.level = null;

@@ -3,25 +3,25 @@ import * as mth from "/src/math.js";
 import { EnemyBullet0 } from "/src/bullet.js";
 import { BulletAIAccelerate } from "/src/bulletai.js";
 
-export default class BossPhase0_1{
+export default class BossPhase0_2{
     constructor(game){
         this.game = game;
-        this.nextPhase = null;
 
         this.time = -130;
         this.ang = mth.randomUniform(0,Math.PI/5);
-        this.dir = 1;
-
     }
     init(){
-        this.game.level.phase = this;
-        this.boss = this.game.boss;
+        this.boss = this.game.level.boss;
+
+        this.start = {
+            x: this.boss.body.x,
+            y: this.boss.body.y,
+        };
     }
     update(){
         this.time++;
-        if(this.boss.health < 0){
-            deleteAllBullets(this.game);
-            //this.nextPhase.init();
+        if(this.boss.health < 1400){
+            this.boss.nextPhase();
             return;
         }
         this.updateBoss(this.time);
@@ -32,8 +32,8 @@ export default class BossPhase0_1{
         return;
         if(total%180 < 40)
         {
-            this.boss.body.x = mth.easeIn(SCREEN_WIDTH/2,3*SCREEN_WIDTH/4,(total%180)/40);
-            this.boss.body.y = mth.easeIn(200,130,(total%180)/40);
+            this.boss.body.x = mth.easeIn(this.start.x,3*SCREEN_WIDTH/4,(total%180)/40);
+            this.boss.body.y = mth.easeIn(this.start.y,130,(total%180)/40);
             return;
         }
         if(total%180 < 80)
@@ -54,7 +54,7 @@ export default class BossPhase0_1{
                 for(let j = 0; j < 18; j++){
                     let bullet = new EnemyBullet0(this.game, 
                         this.boss.body.x, this.boss.body.y,
-                        25, mth.angleAtoB(this.game.boss.body,this.game.player.body)+j*Math.PI/9,
+                        25, mth.angleAtoB(this.boss.body,this.game.player.body)+j*Math.PI/9,
                         "#060","#0f0",10);
                     bullet.ai = new BulletAIAccelerate(bullet,2,30);
                     this.game.enemybullets.push(bullet);

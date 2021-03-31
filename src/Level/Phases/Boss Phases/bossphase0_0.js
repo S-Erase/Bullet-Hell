@@ -1,27 +1,21 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import Boss from "/src/boss.js";
-import { EnemyBullet0, deleteAllBullets } from "/src/bullet.js";
-import BossPhase0_1 from "./bossphase0_1.js";
+import { EnemyBullet0 } from "/src/bullet.js";
 
 export default class BossPhase0_0{
     constructor(game){
         this.game = game;
-        this.nextPhase = new BossPhase0_1(game);
 
         this.time = -60;
         this.ang = mth.randomUniform(0,Math.PI/12);
     }
     init(){
-        this.game.boss = new Boss(3500, SCREEN_WIDTH/2, -12);
-        this.boss = this.game.boss;
-        this.game.level.phase = this;
+        this.boss = this.game.level.boss;
     }
     update(){
         this.time++;
         if(this.boss.health < 2800){
-            deleteAllBullets(this.game);
-            this.nextPhase.init();
+            this.boss.nextPhase();
             return;
         }
         this.updateBoss(this.time);

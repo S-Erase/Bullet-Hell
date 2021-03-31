@@ -22,6 +22,7 @@ export class IntroMenu{
                 if(this.game.gameFrame>10){
                     this.game.state = gameState.Running;
                     this.game.level = new Level0(this.game);
+                    this.game.level.init();
                     this.game.menu = null;
                 }
                 break;
