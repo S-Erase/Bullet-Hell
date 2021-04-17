@@ -1,10 +1,11 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import { EnemyBullet0 } from "/src/bullet.js";
+import { EnemyBullet0 } from "/src/Bullets/bullet.js";
 
 export default class BossPhase0_0{
-    constructor(game){
+    constructor(game, ratio){
         this.game = game;
+        this.ratio = ratio;
 
         this.time = -60;
         this.ang = mth.randomUniform(0,Math.PI/12);
@@ -14,7 +15,7 @@ export default class BossPhase0_0{
     }
     update(){
         this.time++;
-        if(this.boss.health < 2800){
+        if(this.boss.health < this.ratio*this.boss.maxHealth){
             this.boss.nextPhase();
             return;
         }
@@ -39,7 +40,7 @@ export default class BossPhase0_0{
             for(let i = 0; i < 20; i++){
                 if(total==6*i){
                     for(let j = 0; j < 24; j++){
-                        this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                        this.game.enemybullets.push(EnemyBullet0(this.game, 
                             this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/12),
                             this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/12),
                             (1+i), this.ang+j*Math.PI/12,
@@ -50,7 +51,7 @@ export default class BossPhase0_0{
             if(total==6*19){
                 for(let i = 0; i < 15; i++){
                     for(let j = 0; j < 24; j++){
-                        this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                        this.game.enemybullets.push(EnemyBullet0(this.game, 
                             this.boss.body.x + 20*Math.cos(this.ang+(j+0.5)*Math.PI/12),
                             this.boss.body.y + 20*Math.sin(this.ang+(j+0.5)*Math.PI/12),
                             (1+i), this.ang+(j+0.5)*Math.PI/12,
@@ -64,7 +65,7 @@ export default class BossPhase0_0{
             if(Math.floor(total/20)-Math.floor((total-1)/20)){
                 for(let i = 0; i < 5; i++){
                     for(let j = 0; j < 5; j++){
-                        this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                        this.game.enemybullets.push(EnemyBullet0(this.game, 
                         this.boss.body.x + 20*Math.cos(this.ang+2*i*Math.PI/5),
                         this.boss.body.y + 20*Math.sin(this.ang+2*i*Math.PI/5),
                         1+2*j/3, this.ang+2*i*Math.PI/5,

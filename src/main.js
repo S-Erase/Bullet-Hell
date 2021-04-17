@@ -2,7 +2,7 @@ import Game, {gameState} from "./game.js";
 import { PauseMenu } from "./menu.js";
 import BossPhase0_2 from "./Level/Phases/Boss Phases/bossphase0_2.js";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
-import { deleteAllBullets } from "./bullet.js";
+import { deleteAllBullets } from "./Bullets/bullet.js";
 
 var game = new Game();
 

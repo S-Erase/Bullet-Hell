@@ -1,11 +1,12 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import { EnemyBullet0 } from "/src/bullet.js";
-import { BulletAISlowCurve } from "/src/bulletai.js";
+import { EnemyBullet0 } from "/src/Bullets/bullet.js";
+import { BulletAISlowCurve } from "/src/Bullets/bulletai.js";
 
 export default class BossPhase0_1{
-    constructor(game){
+    constructor(game, ratio){
         this.game = game;
+        this.ratio = ratio;
 
         this.time = -60;
         this.ang = mth.randomUniform(0,Math.PI/5);
@@ -21,7 +22,7 @@ export default class BossPhase0_1{
     }
     update(){
         this.time++;
-        if(this.boss.health < 2100){
+        if(this.boss.health < this.ratio*this.boss.maxHealth){
             this.boss.nextPhase();
             return;
         }
@@ -39,7 +40,7 @@ export default class BossPhase0_1{
             for(let i = 0; i < 15; i++){
                 if(total==-60+4*i){
                     for(let j = 0; j < 18; j++){
-                        this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                        this.game.enemybullets.push(EnemyBullet0(this.game, 
                             this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/9),
                             this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/9),
                             (1+i/4), this.ang+j*Math.PI/9,
@@ -52,7 +53,7 @@ export default class BossPhase0_1{
         }
         if(total < 10){
             for(let j = 0; j < 18; j++){
-                this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                this.game.enemybullets.push(EnemyBullet0(this.game, 
                     this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/9),
                     this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/9),
                     (1+total/3), this.ang+j*Math.PI/9,
@@ -63,7 +64,7 @@ export default class BossPhase0_1{
         }
             if(Math.floor(total/4)-Math.floor((total-1)/4)){
                 for(let i = 0; i < 10; i++){
-                    let bullet = new EnemyBullet0(this.game, 
+                    let bullet = EnemyBullet0(this.game, 
                         this.boss.body.x + 20*Math.cos(this.ang+i*Math.PI/5),
                         this.boss.body.y + 20*Math.sin(this.ang+i*Math.PI/5),
                         3, this.ang+i*Math.PI/5,

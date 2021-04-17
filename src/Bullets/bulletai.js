@@ -1,6 +1,6 @@
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "./screen.js";
-import { doCirclesIntersect } from "./circle.js";
-import * as mth from "./math.js";
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
+import { doCirclesIntersect } from "/src/hitbox.js";
+import * as mth from "/src/math.js";
 import { lifeStage } from "./bullet.js";
 
 export default class BulletAIDefault{
@@ -138,8 +138,7 @@ export class BulletAIGravity{
         }
         this.bullet.body.x += this.bullet.vx;
         this.bullet.body.y += this.bullet.vy;
-        if (this.bullet.body.y < -this.bullet.body.radius){this.bullet.delete = true;}
-        else if (this.bullet.body.x < -this.bullet.body.radius){this.bullet.delete = true;}
+        if (this.bullet.body.x < -this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.y > SCREEN_HEIGHT+this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.x > SCREEN_WIDTH+this.bullet.body.radius){this.bullet.delete = true;}
         else{

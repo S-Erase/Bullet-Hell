@@ -18,6 +18,7 @@ export default class Game{
         this.playerbullets = [];
 
         this.enemybullets = [];
+        this.enemies = [];
 
         this.state = gameState.Intro;
 
@@ -36,6 +37,8 @@ export default class Game{
             this.playerbullets = this.playerbullets.filter(obj => !obj.delete);
             this.enemybullets.forEach(obj => obj.update());
             this.enemybullets = this.enemybullets.filter(obj => !obj.delete);
+            this.enemies.forEach(obj => obj.update());
+            this.enemies = this.enemybullets.filter(obj => (obj.health > 0));
             
             if(this.level !== null)
             this.level.update();

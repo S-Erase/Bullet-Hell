@@ -1,6 +1,5 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import { EnemyBullet0 } from "/src/bullet.js";
 
 export default class LevelPhase0_0{
     constructor(game){

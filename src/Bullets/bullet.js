@@ -1,6 +1,6 @@
-import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "./screen.js";
-import Circle, { doCirclesIntersect } from "./circle.js";
-import { easeIn, lErp } from "./math.js";
+import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "/src/screen.js";
+import Circle, { doCirclesIntersect } from "/src/hitbox.js";
+import { easeIn, lErp } from "/src/math.js";
 import BulletAIDefault from "./bulletai.js";
 
 export class PlayerBullet{
@@ -40,65 +40,7 @@ export var lifeStage = {
     dying: 2,
 };
 
-export class EnemyBullet0{
-    constructor(game,x,y,vel,ang, col0="#fff", col1="#f00", rad=2){
-        this.body = new Circle(x,y,rad);
-        this.vx = vel*Math.cos(ang);
-        this.vy = vel*Math.sin(ang);
-        this.game = game;
-        this.fillStyle = col0;
-        this.strokeStyle = col1;
-        this.lifeStage = lifeStage.birth;
-        this.delete = false;
-        this.birthFrame = game.level.levelTime;
-        this.birthPhase = 10;
-        this.deathFrame = null;
-        this.ai = new BulletAIDefault(this);
-    }
-    update(){
-        if(this.lifeStage != lifeStage.dying){
-            if(this.ai !== null)
-            this.ai.update();
-
-            if(this.lifeStage == lifeStage.birth){
-                let life = this.game.level.levelTime - this.birthFrame;
-                if(life >= this.birthPhase)
-                this.lifeStage = lifeStage.life;
-            }
-        }
-        else{
-            let life = this.game.level.levelTime - this.deathFrame;
-            this.body.y -= (10-life)/10;
-            if(life >= 10)
-            this.delete = true;
-        }
-    }
-    draw(){
-		ctx.beginPath();
-        let drawRadius = this.body.radius+3;
-        let drawOpacity = 1;
-        if(this.lifeStage == lifeStage.birth){
-            let life = this.game.level.levelTime - this.birthFrame;
-            drawRadius *= easeIn(2,1,life/this.birthPhase);
-            drawOpacity = easeIn(0,1,life/this.birthPhase);;
-        }
-        else if(this.lifeStage == lifeStage.dying){
-            let life = this.game.level.levelTime - this.deathFrame;
-            drawRadius *= lErp(1,3,life/10);
-            drawOpacity = lErp(1,0,life/10);;
-        }
-		ctx.arc(this.body.x, this.body.y, drawRadius, 0, 2 * Math.PI);
-        if(this.lifeStage != lifeStage.dying){
-            ctx.fillStyle = this.fillStyle;
-		    ctx.fill(); 
-        }
-		
-        ctx.globalAlpha = drawOpacity;
-		ctx.strokeStyle = this.strokeStyle;
-		ctx.stroke();
-    }
-}
-export class EnemyBullet1{
+export class EnemyBullet{
     constructor(game,x,y,vx,vy, col0="#fff", col1="#f00", rad=2){
         this.body = new Circle(x,y,rad);
         this.vx = vx;
@@ -155,6 +97,10 @@ export class EnemyBullet1{
 		ctx.strokeStyle = this.strokeStyle;
 		ctx.stroke();
     }
+}
+
+export function EnemyBullet0(game,x,y,vel,ang, col0="#fff", col1="#f00", rad=2){
+    return new EnemyBullet(game,x,y,vel*Math.cos(ang),vel*Math.sin(ang),col0,col1,rad);
 }
 
 export function deleteAllBullets(game){

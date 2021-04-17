@@ -1,6 +1,6 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "../screen.js";
-import { deleteAllBullets } from "/src/bullet.js";
-import Circle from "../circle.js";
+import { deleteAllBullets } from "/src/Bullets/bullet.js";
+import Circle from "../hitbox.js";
 import BossPhase0_0 from "./Phases/Boss Phases/bossphase0_0.js";
 import BossPhase0_1 from "./Phases/Boss Phases/bossphase0_1.js";
 import BossPhase0_2 from "./Phases/Boss Phases/bossphase0_2.js";
@@ -13,7 +13,9 @@ export default class Boss0{
         this.maxHealth = health;
         this.health = health;
 
-		this.phases = [new BossPhase0_0(game), new BossPhase0_1(game), new BossPhase0_2(game), new BossPhase0_3(game)];
+		this.phases = [new BossPhase0_0(game, 0.8), new BossPhase0_1(game, 0.6), new BossPhase0_2(game, 0.4), new BossPhase0_3(game, 0.2)];
+		//this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_2(game, 0.85), new BossPhase0_3(game, 0.2)];
+		//this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_3(game, 0.2)];
 		this.phaseindex = 0;
 		this.phase = null;
 

@@ -1,8 +1,8 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "./screen.js";
 import * as mth from "/src/math.js";
-import { PlayerBullet, deleteAllBullets } from "./bullet.js";
+import { PlayerBullet, deleteAllBullets } from "/src/Bullets/bullet.js";
 import { star, heart } from "./shapes.js";
-import Circle from "./circle.js";
+import Circle from "./hitbox.js";
 
 export default class Player{
 	constructor(game){

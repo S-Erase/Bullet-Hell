@@ -1,5 +1,5 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../screen.js";
-import { deleteAllBullets } from "/src/bullet.js";
+import { deleteAllBullets } from "/src/Bullets/bullet.js";
 import Boss0 from "./boss0.js";
 import LevelPhase0_0 from "./Phases/Level Phases/levelphase0_0.js";
 

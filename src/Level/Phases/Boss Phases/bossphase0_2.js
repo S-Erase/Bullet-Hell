@@ -1,14 +1,19 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import { EnemyBullet0 } from "/src/bullet.js";
-import { BulletAIAccelerate } from "/src/bulletai.js";
+import { EnemyBullet0 } from "/src/Bullets/bullet.js";
+import { BulletAIAccelerate } from "/src/Bullets/bulletai.js";
 
 export default class BossPhase0_2{
-    constructor(game){
+    constructor(game, ratio){
         this.game = game;
+        this.ratio = ratio;
 
         this.time = -130;
         this.ang = mth.randomUniform(0,Math.PI/5);
+
+        this.bossmoving = true;
+        this.bosstime = 60;
+        this.end = {x:0,y:0};
     }
     init(){
         this.boss = this.game.level.boss;
@@ -20,7 +25,7 @@ export default class BossPhase0_2{
     }
     update(){
         this.time++;
-        if(this.boss.health < 1400){
+        if(this.boss.health < this.ratio*this.boss.maxHealth){
             this.boss.nextPhase();
             return;
         }
@@ -30,29 +35,43 @@ export default class BossPhase0_2{
     updateBoss(total){
         if(total < 0)
         return;
-        if(total%180 < 40)
-        {
-            this.boss.body.x = mth.easeIn(this.start.x,3*SCREEN_WIDTH/4,(total%180)/40);
-            this.boss.body.y = mth.easeIn(this.start.y,130,(total%180)/40);
-            return;
+        if(this.bossmoving){
+            switch(this.bosstime){
+                case 60:
+                    this.start.x = this.boss.body.x;
+                    this.start.y = this.boss.body.y;
+                    this.end.x = mth.clamp(SCREEN_WIDTH*0.2, SCREEN_WIDTH*0.8, this.boss.body.x + mth.randomUniform(-100,100));
+                    this.end.y = mth.clamp(SCREEN_HEIGHT*0.1,SCREEN_HEIGHT*0.4,this.boss.body.y + mth.randomUniform(-100,100));
+
+                    this.boss.body.x = mth.easeIn(this.start.x,this.end.x,1-this.bosstime/60);
+                    this.boss.body.y = mth.easeIn(this.start.y,this.end.y,1-this.bosstime/60);
+                    break;
+                case 0:
+                    this.boss.body.x = mth.easeIn(this.start.x,this.end.x,1-this.bosstime/60);
+                    this.boss.body.y = mth.easeIn(this.start.y,this.end.y,1-this.bosstime/60);
+
+                    this.bossmoving = false;
+                    this.bosstime = mth.randomUniformDiscrete(40,180);
+                    break;
+                default:
+                    this.boss.body.x = mth.easeIn(this.start.x,this.end.x,1-this.bosstime/60);
+                    this.boss.body.y = mth.easeIn(this.start.y,this.end.y,1-this.bosstime/60);
+                    break;
+            }
         }
-        if(total%180 < 80)
-        {
-            this.boss.body.x = mth.easeIn(3*SCREEN_WIDTH/4,SCREEN_WIDTH/4,(total%180-40)/40);
-            return;
+        else{
+            if(this.bosstime == 0){
+                this.bossmoving = true;
+                this.bosstime = 61;
+            }
         }
-        if(total%180 < 120)
-        {
-            this.boss.body.x = mth.easeIn(SCREEN_WIDTH/4,SCREEN_WIDTH/2,(total%180-80)/40);
-            this.boss.body.y = mth.easeIn(130,200,(total%180-80)/40);
-            return;
-        }
+        this.bosstime--;
     }
     updateBullets(total){
         if(total < -10){
             if(total%4 == 0){
                 for(let j = 0; j < 18; j++){
-                    let bullet = new EnemyBullet0(this.game, 
+                    let bullet = EnemyBullet0(this.game, 
                         this.boss.body.x, this.boss.body.y,
                         25, mth.angleAtoB(this.boss.body,this.game.player.body)+j*Math.PI/9,
                         "#060","#0f0",10);
@@ -69,7 +88,7 @@ export default class BossPhase0_2{
         if(total < 0){
             if(total%2 == 0){
                 for(let j = 0; j < 36; j++){
-                    this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                    this.game.enemybullets.push(EnemyBullet0(this.game, 
                         this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/18),
                         this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/18),
                         15, this.ang+j*Math.PI/18,
@@ -78,47 +97,31 @@ export default class BossPhase0_2{
             }
             return;
         }
-        if(total%180 == 0)
+        if(total%120 == 0)
         {
             this.ang = mth.randomUniform(0,Math.PI/5);
             return;
         }
-        if(total%180 < 40)
+        if(total%120 < 40)
         {
             if(total%4 == 0){
                 for(let j = 0; j < 10; j++){
-                    this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                    this.game.enemybullets.push(EnemyBullet0(this.game, 
                         this.boss.body.x, this.boss.body.y,
-                        1+(total%180)/8, this.ang+j*Math.PI/5,
+                        1+(total%120)/8, this.ang+j*Math.PI/5,
                         "#fff","#f70",3));
                 }
                 this.ang+=0.06;
             }
             return;
         }
-        if(total%180 < 80)
-        {
-            if(total%2 == 0){
-                for(let j = 0; j < 2; j++){
-                    this.game.enemybullets.push(new EnemyBullet0(this.game, 
-                        this.boss.body.x, this.boss.body.y,
-                        3+j, mth.lErp(0,Math.PI,(total%180-40)/40),
-                        "#fff","#f70",3));
-                    this.game.enemybullets.push(new EnemyBullet0(this.game, 
-                        this.boss.body.x, this.boss.body.y,
-                        3+j, mth.lErp(0,-Math.PI,(total%180-40)/40),
-                        "#fff","#f70",3));
-                }
-            }
-            return;
-        }
-        if(total%180 < 120)
+        if(total%120 < 80)
         {
             if(total%4 == 0){
                 for(let j = 0; j < 10; j++){
-                    this.game.enemybullets.push(new EnemyBullet0(this.game, 
+                    this.game.enemybullets.push(EnemyBullet0(this.game, 
                         this.boss.body.x, this.boss.body.y,
-                        1+(total%180-80)/8, this.ang+j*Math.PI/5,
+                        1+(total%120-40)/8, this.ang+j*Math.PI/5,
                         "#fff","#f70",3));
                 }
                 this.ang-=0.06;
