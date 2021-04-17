@@ -1,13 +1,12 @@
-import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "../screen.js";
-import { deleteAllBullets } from "/src/bullet.js";
-import Circle from "../hitbox.js";
+import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "./screen.js";
+import Circle from "./hitbox.js";
 
 export default class Enemy{
-    constructor(game,health,x,y){
+    constructor(game,health,x,y,fill = "#999"){
         this.game = game;
         this.body = new Circle(x,y,10);
-        this.maxHealth = health;
-        this.health = health;
+        this.health = health; //Set to negative for immortal enemies
+        this.birthFrame = game.level.levelTime;
 
         this.ai = null;
     }

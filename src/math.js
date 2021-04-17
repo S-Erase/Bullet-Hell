@@ -28,3 +28,6 @@ export function randomUniformDiscrete(a, b) //a <= x < b
 {
     return Math.floor(a + (b-a)*Math.random());
 }
+
+//Constants
+export const goldenRatio = (1+Math.sqrt(5))/2;

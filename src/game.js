@@ -33,12 +33,12 @@ export default class Game{
         if(this.state == gameState.Running)
         {
             this.player.update();
+            this.enemies.forEach(obj => obj.update());
+            this.enemies = this.enemies.filter(obj => (obj.health != 0));
             this.playerbullets.forEach(obj => obj.update());
             this.playerbullets = this.playerbullets.filter(obj => !obj.delete);
             this.enemybullets.forEach(obj => obj.update());
             this.enemybullets = this.enemybullets.filter(obj => !obj.delete);
-            this.enemies.forEach(obj => obj.update());
-            this.enemies = this.enemybullets.filter(obj => (obj.health > 0));
             
             if(this.level !== null)
             this.level.update();
@@ -66,6 +66,7 @@ export default class Game{
         this.playerbullets.forEach(obj => obj.draw());
 
         this.enemybullets.forEach(obj => obj.draw());
+        this.enemies.forEach(obj => obj.draw());
 
         //UI
         ctx.globalAlpha = 1;
@@ -81,6 +82,7 @@ export default class Game{
         this.player.reset();
         this.playerbullets.length = 0;
         this.enemybullets.length = 0;
+        this.enemies.length = 0;
         this.state = gameState.Running;
         this.level = new Level0(this);
         this.level.init();
@@ -92,6 +94,7 @@ export default class Game{
         this.player.reset();
         this.playerbullets.length = 0;
         this.enemybullets.length = 0;
+        this.enemies.length = 0;
         this.state = gameState.Intro;
         this.level = null;
         this.menu = new IntroMenu(this);

@@ -45,7 +45,7 @@ export default class BossPhase0_3{
                         this.boss.body.x, this.boss.body.y,
                         -(2+i/3)*(Math.cos(Math.PI*(1+(total-i/2)/90)) + 0.5*Math.sin(Math.PI*(1+(total-i/2)/90))),
                         (2+i/3)*( Math.cos(Math.PI*(1+(total-i/2)/90)) - 0.5*Math.sin(Math.PI*(1+(total-i/2)/90))),
-                        "#fff","#02f",3);
+                        "#02f","#fff",3);
                     bullet.ai = new BulletAIGravity(bullet,0.05,6);
                     this.game.enemybullets.push(bullet);
 
@@ -53,7 +53,7 @@ export default class BossPhase0_3{
                         this.boss.body.x, this.boss.body.y,
                         (2+i/3)*(Math.cos(Math.PI*(1+(total-i/2)/90)) + 0.5*Math.sin(Math.PI*(1+(total-i/2)/90))),
                         (2+i/3)*(Math.cos(Math.PI*(1+(total-i/2)/90)) - 0.5*Math.sin(Math.PI*(1+(total-i/2)/90))),
-                        "#fff","#777",3);
+                        "#777","#fff",3);
                     bullet.ai = new BulletAIGravity(bullet,0.05,6);
                     this.game.enemybullets.push(bullet);
                 }

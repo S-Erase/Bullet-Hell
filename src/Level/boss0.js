@@ -13,8 +13,8 @@ export default class Boss0{
         this.maxHealth = health;
         this.health = health;
 
-		this.phases = [new BossPhase0_0(game, 0.8), new BossPhase0_1(game, 0.6), new BossPhase0_2(game, 0.4), new BossPhase0_3(game, 0.2)];
-		//this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_2(game, 0.85), new BossPhase0_3(game, 0.2)];
+		//this.phases = [new BossPhase0_0(game, 0.8), new BossPhase0_1(game, 0.6), new BossPhase0_2(game, 0.4), new BossPhase0_3(game, 0.2)];
+		this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_2(game, 0.75), new BossPhase0_3(game, 0.2)];
 		//this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_3(game, 0.2)];
 		this.phaseindex = 0;
 		this.phase = null;
@@ -28,6 +28,7 @@ export default class Boss0{
 	}
 	nextPhase(){
         deleteAllBullets(this.game);
+		this.game.enemies.length = 0;
         this.phaseindex++;
         if(this.phaseindex < this.phases.length){
             this.phase = this.phases[this.phaseindex];

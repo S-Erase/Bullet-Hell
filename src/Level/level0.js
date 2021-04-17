@@ -20,6 +20,7 @@ export default class Level0{
     }
     nextPhase(){
         deleteAllBullets(this.game);
+		this.game.enemies.length = 0;
         this.phaseindex++;
         if(this.phaseindex < this.phases.length){
             this.phase = this.phases[this.phaseindex];

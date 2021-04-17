@@ -44,7 +44,7 @@ export default class BossPhase0_0{
                             this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/12),
                             this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/12),
                             (1+i), this.ang+j*Math.PI/12,
-                            "#600","#f00",10));
+                            "#f00","#600",10));
                     }
                 }
             }
@@ -55,7 +55,7 @@ export default class BossPhase0_0{
                             this.boss.body.x + 20*Math.cos(this.ang+(j+0.5)*Math.PI/12),
                             this.boss.body.y + 20*Math.sin(this.ang+(j+0.5)*Math.PI/12),
                             (1+i), this.ang+(j+0.5)*Math.PI/12,
-                            "#603","#f07",8));
+                            "#f07","#603",8));
                     }
                 }
             }
@@ -69,7 +69,7 @@ export default class BossPhase0_0{
                         this.boss.body.x + 20*Math.cos(this.ang+2*i*Math.PI/5),
                         this.boss.body.y + 20*Math.sin(this.ang+2*i*Math.PI/5),
                         1+2*j/3, this.ang+2*i*Math.PI/5,
-                        "#fff",`hsl(${72*i},100%,50%)`));
+                        `hsl(${72*i},100%,50%)`));
                     }
                 }
                 this.ang+=1;

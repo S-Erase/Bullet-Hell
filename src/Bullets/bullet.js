@@ -41,13 +41,13 @@ export var lifeStage = {
 };
 
 export class EnemyBullet{
-    constructor(game,x,y,vx,vy, col0="#fff", col1="#f00", rad=2){
+    constructor(game,x,y,vx,vy, strokeStyle="#f00", fillStyle="#fff", rad=2){
         this.body = new Circle(x,y,rad);
         this.vx = vx;
         this.vy = vy;
         this.game = game;
-        this.fillStyle = col0;
-        this.strokeStyle = col1;
+        this.fillStyle = fillStyle;
+        this.strokeStyle = strokeStyle;
         this.lifeStage = lifeStage.birth;
         this.delete = false;
         this.birthFrame = game.level.levelTime;
@@ -99,7 +99,7 @@ export class EnemyBullet{
     }
 }
 
-export function EnemyBullet0(game,x,y,vel,ang, col0="#fff", col1="#f00", rad=2){
+export function EnemyBullet0(game,x,y,vel,ang, col0="#f00", col1="#fff", rad=2){
     return new EnemyBullet(game,x,y,vel*Math.cos(ang),vel*Math.sin(ang),col0,col1,rad);
 }
 

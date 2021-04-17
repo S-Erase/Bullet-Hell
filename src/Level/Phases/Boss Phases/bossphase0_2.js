@@ -1,7 +1,82 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import { EnemyBullet0 } from "/src/Bullets/bullet.js";
+import { doCirclesIntersect } from "/src/hitbox.js";
+import { EnemyBullet0, lifeStage } from "/src/Bullets/bullet.js";
 import { BulletAIAccelerate } from "/src/Bullets/bulletai.js";
+import Enemy from "/src/enemy.js";
+
+class BulletAI{
+    constructor(bullet, ang, time){
+        this.game = bullet.game;
+        this.bullet = bullet;
+        this.startVel = Math.sqrt(bullet.vx**2 + bullet.vy**2);
+        this.vel = this.startVel;
+        this.ang = Math.atan2(bullet.vy,bullet.vx);
+        this.newang = ang;
+        this.time = time;
+        this.accel = true;
+    }
+    update(){
+        if(this.accel){
+            let life = this.game.level.levelTime-this.bullet.birthFrame;
+            if(life == 0){
+                this.vel = this.startVel - this.startVel/this.time + this.startVel/(3*this.time**2);
+            }
+            else if(life < this.time){ //Cubic interpolation
+                this.vel -= this.startVel/this.time*2*(1-life/this.time);
+            }
+            else if(life == this.time){
+                this.vel = this.startVel;
+                this.ang = this.newang;
+                this.accel = false;
+            }
+        }
+        
+        this.bullet.vx = this.vel*Math.cos(this.ang);
+        this.bullet.vy = this.vel*Math.sin(this.ang);
+        this.bullet.body.x += this.bullet.vx;
+        this.bullet.body.y += this.bullet.vy;
+        if (this.bullet.body.y < -this.bullet.body.radius){this.bullet.delete = true;}
+        else if (this.bullet.body.x < -this.bullet.body.radius){this.bullet.delete = true;}
+        else if (this.bullet.body.y > SCREEN_HEIGHT+this.bullet.body.radius){this.bullet.delete = true;}
+        else if (this.bullet.body.x > SCREEN_WIDTH+this.bullet.body.radius){this.bullet.delete = true;}
+        else{
+            if(this.bullet.lifeStage == lifeStage.life && doCirclesIntersect(this.bullet.body, this.game.player.body)){
+                this.bullet.delete = true;
+                this.game.player.kill();
+            }
+        }
+    }
+}
+
+class EnemyAI{
+    constructor(enemy, ang){
+        this.enemy = enemy;
+        this.game = enemy.game;
+        this.vx = 5*Math.cos(ang);
+        this.vy = 5*Math.sin(ang);
+        this.ang = ang;
+    }
+    update(){
+        this.enemy.body.x += this.vx;
+        this.enemy.body.y += this.vy;
+        let life = this.game.level.levelTime-this.enemy.birthFrame;
+        if(life%15 == 0){
+            let bullet = EnemyBullet0(this.game, 
+                this.enemy.body.x, this.enemy.body.y,
+                5, mth.angleAtoB(this.enemy.body,this.game.player.body),
+                "#f00");
+            bullet.ai = new BulletAI(bullet,this.ang,60);
+            this.game.enemybullets.push(bullet);
+            this.ang++;
+
+            if (this.enemy.body.y < -this.enemy.body.radius){this.enemy.health = 0;}
+            else if (this.enemy.body.x < -this.enemy.body.radius){this.enemy.health = 0;}
+            else if (this.enemy.body.y > SCREEN_HEIGHT+this.enemy.body.radius){this.enemy.health = 0;}
+            else if (this.enemy.body.x > SCREEN_WIDTH+this.enemy.body.radius){this.enemy.health = 0;}
+        }
+    }
+}
 
 export default class BossPhase0_2{
     constructor(game, ratio){
@@ -74,7 +149,7 @@ export default class BossPhase0_2{
                     let bullet = EnemyBullet0(this.game, 
                         this.boss.body.x, this.boss.body.y,
                         25, mth.angleAtoB(this.boss.body,this.game.player.body)+j*Math.PI/9,
-                        "#060","#0f0",10);
+                        "#0f0","#060",10);
                     bullet.ai = new BulletAIAccelerate(bullet,2,30);
                     this.game.enemybullets.push(bullet);
                 }
@@ -92,40 +167,17 @@ export default class BossPhase0_2{
                         this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/18),
                         this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/18),
                         15, this.ang+j*Math.PI/18,
-                        "#fff","#0f0",5));
+                        "#0f0","#fff",5));
                 }
             }
             return;
         }
-        if(total%120 == 0)
+        if(total%20 == 0)
         {
-            this.ang = mth.randomUniform(0,Math.PI/5);
-            return;
-        }
-        if(total%120 < 40)
-        {
-            if(total%4 == 0){
-                for(let j = 0; j < 10; j++){
-                    this.game.enemybullets.push(EnemyBullet0(this.game, 
-                        this.boss.body.x, this.boss.body.y,
-                        1+(total%120)/8, this.ang+j*Math.PI/5,
-                        "#fff","#f70",3));
-                }
-                this.ang+=0.06;
-            }
-            return;
-        }
-        if(total%120 < 80)
-        {
-            if(total%4 == 0){
-                for(let j = 0; j < 10; j++){
-                    this.game.enemybullets.push(EnemyBullet0(this.game, 
-                        this.boss.body.x, this.boss.body.y,
-                        1+(total%120-40)/8, this.ang+j*Math.PI/5,
-                        "#fff","#f70",3));
-                }
-                this.ang-=0.06;
-            }
+            this.ang += 2*Math.PI*mth.goldenRatio;
+            let enemy = new Enemy(this.game,-1,this.boss.body.x,this.boss.body.y);
+            enemy.ai = new EnemyAI(enemy,this.ang);
+            this.game.enemies.push(enemy);
             return;
         }
     }

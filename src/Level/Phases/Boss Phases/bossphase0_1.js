@@ -44,7 +44,7 @@ export default class BossPhase0_1{
                             this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/9),
                             this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/9),
                             (1+i/4), this.ang+j*Math.PI/9,
-                            `hsl(${20*j},100%,20%)`,`hsl(${20*j},100%,50%)`,10));
+                            `hsl(${20*j},100%,50%)`,`hsl(${20*j},100%,20%)`,10));
                     }
                     this.ang-=0.025;
                 }
@@ -57,7 +57,7 @@ export default class BossPhase0_1{
                     this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/9),
                     this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/9),
                     (1+total/3), this.ang+j*Math.PI/9,
-                    "#fff",`hsl(${20*j},100%,50%)`,5));
+                    `hsl(${20*j},100%,50%)`,"#fff",5));
             }
             this.ang-=mth.lErp(0.15,-0.15,total/9);
             return;
@@ -68,7 +68,7 @@ export default class BossPhase0_1{
                         this.boss.body.x + 20*Math.cos(this.ang+i*Math.PI/5),
                         this.boss.body.y + 20*Math.sin(this.ang+i*Math.PI/5),
                         3, this.ang+i*Math.PI/5,
-                        "#fff","#00f");
+                        "#00f");
                     bullet.ai = new BulletAISlowCurve(bullet,Math.PI/2*this.dir);
                     this.game.enemybullets.push(bullet);
                     
