@@ -15,11 +15,6 @@ export default class BulletAIDefault{
         else if (this.bullet.body.x < -this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.y > SCREEN_HEIGHT+this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.x > SCREEN_WIDTH+this.bullet.body.radius){this.bullet.delete = true;}
-        else{
-            if(this.bullet.lifeStage == lifeStage.life && doCirclesIntersect(this.bullet.body, this.game.player.body)){
-                this.game.player.kill();
-            }
-        }
     }
 }
 
@@ -50,12 +45,6 @@ export class BulletAISlowCurve{
         else if (this.bullet.body.x < -this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.y > SCREEN_HEIGHT+this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.x > SCREEN_WIDTH+this.bullet.body.radius){this.bullet.delete = true;}
-        else{
-            if(this.bullet.lifeStage == lifeStage.life && doCirclesIntersect(this.bullet.body, this.game.player.body)){
-                this.bullet.delete = true;
-                this.game.player.kill();
-            }
-        }
     }
 }
 
@@ -76,7 +65,7 @@ export class BulletAIAccelerate{
         if(this.accel){
             let life = this.game.level.levelTime-this.bullet.birthFrame;
             if(life == 0){
-                this.vel = this.startVel + this.velDiff/this.time - this.velDiff/(3*this.time**2);
+                this.vel = this.startVel;
             }
             else if(life < this.time){ //Cubic interpolation
                 this.vel += this.velDiff/this.time*2*(1-life/this.time);
@@ -95,12 +84,6 @@ export class BulletAIAccelerate{
         else if (this.bullet.body.x < -this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.y > SCREEN_HEIGHT+this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.x > SCREEN_WIDTH+this.bullet.body.radius){this.bullet.delete = true;}
-        else{
-            if(this.bullet.lifeStage == lifeStage.life && doCirclesIntersect(this.bullet.body, this.game.player.body)){
-                this.bullet.delete = true;
-                this.game.player.kill();
-            }
-        }
     }
 }
 
@@ -108,43 +91,19 @@ export class BulletAIGravity{
     constructor(bullet, g, maxvy){
         this.bullet = bullet;
         this.game = bullet.game;
-        this.g = g;
-        this.terminalVelocity = maxvy;
 
-        this.accel = true;
+        //Complex equations make motion mirror continuous motion
+        this.drag = 1-Math.exp(-g/maxvy);
+        this.terminalVelocity = maxvy;
+        bullet.vy = maxvy + this.drag*(bullet.vy-maxvy)*maxvy/g;
     }
     update(){
-        if(this.accel){
-            let life = this.game.level.levelTime-this.bullet.birthFrame;
-            if(this.bullet.vy + this.g < this.terminalVelocity){
-                if(life == 0)
-                this.bullet.vy += this.g/2;
-                else
-                this.bullet.vy += this.g;
-            }
-            else if(this.bullet.vy < this.terminalVelocity){
-                if(life == 0)
-                this.bullet.vy = this.terminalVelocity - (this.terminalVelocity-this.bullet.vy)**2/(2*this.g);
-                else{
-                    this.bullet.vy -= this.g/2;
-                    this.bullet.vy = this.terminalVelocity - (this.terminalVelocity-this.bullet.vy)**2/(2*this.g);
-                }
-            }
-            else{
-                this.bullet.vy = this.terminalVelocity;
-                this.accel = false;
-            }
-
-        }
         this.bullet.body.x += this.bullet.vx;
         this.bullet.body.y += this.bullet.vy;
         if (this.bullet.body.x < -this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.y > SCREEN_HEIGHT+this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.x > SCREEN_WIDTH+this.bullet.body.radius){this.bullet.delete = true;}
-        else{
-            if(this.bullet.lifeStage == lifeStage.life && doCirclesIntersect(this.bullet.body, this.game.player.body)){
-                this.game.player.kill();
-            }
-        }
+
+        this.bullet.vy+=this.drag * (this.terminalVelocity - this.bullet.vy);
     }
 }

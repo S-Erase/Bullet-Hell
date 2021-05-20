@@ -5,6 +5,7 @@ import BossPhase0_0 from "./Phases/Boss Phases/bossphase0_0.js";
 import BossPhase0_1 from "./Phases/Boss Phases/bossphase0_1.js";
 import BossPhase0_2 from "./Phases/Boss Phases/bossphase0_2.js";
 import BossPhase0_3 from "./Phases/Boss Phases/bossphase0_3.js";
+import { HeartPiece } from "../items.js";
 
 export default class Boss0{
 	constructor(game,health,x,y){
@@ -13,9 +14,9 @@ export default class Boss0{
         this.maxHealth = health;
         this.health = health;
 
-		//this.phases = [new BossPhase0_0(game, 0.8), new BossPhase0_1(game, 0.6), new BossPhase0_2(game, 0.4), new BossPhase0_3(game, 0.2)];
-		this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_2(game, 0.75), new BossPhase0_3(game, 0.2)];
-		//this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_3(game, 0.2)];
+		this.phases = [new BossPhase0_0(game, 0.8), new BossPhase0_1(game, 0.6), new BossPhase0_2(game, 0.4), new BossPhase0_3(game, 0.2)];
+		//this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_2(game, 0.75), new BossPhase0_3(game, 0.2)];
+		//this.phases = [new BossPhase0_1(game, 0.95), new BossPhase0_3(game, 0.75)];
 		this.phaseindex = 0;
 		this.phase = null;
 
@@ -34,6 +35,7 @@ export default class Boss0{
             this.phase = this.phases[this.phaseindex];
             this.phase.init();
         }
+		this.game.items.push(new HeartPiece(this.game, this.body.x, this.body.y,-30,-30));
 	}
 	drawBoss(){
 		ctx.beginPath();

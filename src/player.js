@@ -1,7 +1,7 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "./screen.js";
 import * as mth from "/src/math.js";
-import { PlayerBullet, deleteAllBullets } from "/src/Bullets/bullet.js";
-import { star, heart } from "./shapes.js";
+import { PlayerBullet, killAllBullets } from "/src/Bullets/bullet.js";
+import { star, heart, heartOneThird, heartTwoThirds } from "./shapes.js";
 import Circle from "./hitbox.js";
 
 export default class Player{
@@ -10,6 +10,7 @@ export default class Player{
 
 		this.body = new Circle(SCREEN_WIDTH/2, SCREEN_HEIGHT-30, 8);
         this.lives = 2;
+        this.lifePieces = 0;
         this.spell = 2;
         this.spellDelay = 0;
 
@@ -76,20 +77,31 @@ export default class Player{
         }
 	}
     drawLives(){
+        ctx.fillStyle = "#e89";
+        ctx.strokeStyle = "#a02";
         for(let i = 0; i < this.lives; i++){
             ctx.beginPath();
-            ctx.fillStyle = "#e89";
-            ctx.strokeStyle = "#a02";
             heart(15+25*i,SCREEN_HEIGHT-40,10);
             ctx.fill();
             ctx.stroke();
         }
+        ctx.beginPath();
+        switch(this.lifePieces){
+            case 1:
+                heartOneThird(15+25*this.lives,SCREEN_HEIGHT-40,10);
+                break;
+            case 2:
+                heartTwoThirds(15+25*this.lives,SCREEN_HEIGHT-40,10);
+                break;
+        }
+        ctx.fill();
+        ctx.stroke();
     }
     drawSpell(){
+        ctx.fillStyle = "#9d9";
+        ctx.strokeStyle = "#090";
         for(let i = 0; i < this.spell; i++){
             ctx.beginPath();
-            ctx.fillStyle = "#9d9";
-            ctx.strokeStyle = "#090";
             star(15+25*i,SCREEN_HEIGHT-15,10);
             ctx.fill();
             ctx.stroke();
@@ -103,13 +115,14 @@ export default class Player{
             this.game.deathFrame = this.game.gameFrame;
         }
         this.lives--;
-        deleteAllBullets(this.game);
+        killAllBullets(this.game);
         this.body.x = SCREEN_WIDTH/2;
         this.body.y = SCREEN_HEIGHT-30;
     }
     reset(){
         this.body = new Circle(SCREEN_WIDTH/2, SCREEN_HEIGHT-30, 8);
         this.lives = 2;
+        this.lifePieces = 0;
         this.spell = 2;
         this.shooting = false;
         this.shotDelay = 0;

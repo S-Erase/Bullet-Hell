@@ -97,15 +97,36 @@ export class EnemyBullet{
 		ctx.strokeStyle = this.strokeStyle;
 		ctx.stroke();
     }
+    kill(){
+        this.lifeStage = lifeStage.dying;
+        this.deathFrame = this.game.level.levelTime;
+    }
+    deleteFun(){
+        this.kill();
+    }
+    intersectsPlayer(){
+        return this.lifeStage == lifeStage.life && doCirclesIntersect(this.body, this.game.player.body)
+    }
 }
 
-export function EnemyBullet0(game,x,y,vel,ang, col0="#f00", col1="#fff", rad=2){
-    return new EnemyBullet(game,x,y,vel*Math.cos(ang),vel*Math.sin(ang),col0,col1,rad);
+export function CreateEnemyBullet0(game,x,y,vel,ang, col0="#f00", col1="#fff", rad=2){
+    let bullet = new EnemyBullet(game,x,y,vel*Math.cos(ang),vel*Math.sin(ang),col0,col1,rad);
+    game.enemybullets.push(bullet);
+    return bullet;
+}
+export function CreateEnemyBullet1(game,x,y,vx,vy, col0="#f00", col1="#fff", rad=2){
+    let bullet = new EnemyBullet(game,x,y,vx,vy,col0,col1,rad);
+    game.enemybullets.push(bullet);
+    return bullet;
 }
 
+export function killAllBullets(game){
+    game.enemybullets.forEach(obj => {
+        obj.kill();
+    });
+}
 export function deleteAllBullets(game){
     game.enemybullets.forEach(obj => {
-        obj.lifeStage = lifeStage.dying;
-        obj.deathFrame = game.level.levelTime;
+        obj.deleteFun();
     });
 }

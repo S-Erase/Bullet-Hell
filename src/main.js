@@ -15,6 +15,7 @@ var keyCodes = {
 	X: 88,
 	C: 67,
 	R: 82,
+	H: 72,
 	lShift: 16,
 	esc: 27,
 }
@@ -55,6 +56,8 @@ function HandleEvents(){
 				}
 				if(event.keyCode == keyCodes.lShift) //lshift
 				game.player.slow = true;
+				if(event.keyCode == keyCodes.H) 
+				game.player.lives = 6;
 				break;
 			case gameState.Paused:
 				switch(event.keyCode){

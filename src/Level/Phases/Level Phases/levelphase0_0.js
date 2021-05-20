@@ -1,5 +1,28 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
+import {EnemyCtsLaser} from "/src/Laser/laser.js";
 import * as mth from "/src/math.js";
+
+class EnemyAI{
+    constructor(enemy, ang, y1){
+        this.enemy = enemy;
+        this.game = enemy.game;
+        this.ang = ang;
+        this.start = 30;
+        this.v0 = 2*(y1-enemy.body.y)/(this.start+1);
+        this.acc = -this.v0/this.start;
+    }
+    update(){
+        let life = this.game.level.levelTime-this.enemy.birthFrame;
+        if(life <= this.start){
+            this.enemy.body.y += this.v0;
+            this.v0 += this.acc;
+            return;
+        }
+        if(life % 60 == 0){
+
+        }
+    }
+}
 
 export default class LevelPhase0_0{
     constructor(game){
@@ -16,12 +39,8 @@ export default class LevelPhase0_0{
             this.game.level.nextPhase();
             return;
         }
-        this.updateBoss(this.time);
-        this.updateBullets(this.time);
+        this.updateEnemies(this.time);
     }
-    updateBoss(total){
-    }
-    updateBullets(total){
-        
+    updateEnemies(total){
     }
 }

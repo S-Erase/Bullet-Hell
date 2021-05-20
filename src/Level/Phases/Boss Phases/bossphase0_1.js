@@ -1,6 +1,6 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import { EnemyBullet0 } from "/src/Bullets/bullet.js";
+import { CreateEnemyBullet0 } from "/src/Bullets/bullet.js";
 import { BulletAISlowCurve } from "/src/Bullets/bulletai.js";
 
 export default class BossPhase0_1{
@@ -40,11 +40,11 @@ export default class BossPhase0_1{
             for(let i = 0; i < 15; i++){
                 if(total==-60+4*i){
                     for(let j = 0; j < 18; j++){
-                        this.game.enemybullets.push(EnemyBullet0(this.game, 
+                        CreateEnemyBullet0(this.game, 
                             this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/9),
                             this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/9),
                             (1+i/4), this.ang+j*Math.PI/9,
-                            `hsl(${20*j},100%,50%)`,`hsl(${20*j},100%,20%)`,10));
+                            `hsl(${20*j},100%,50%)`,`hsl(${20*j},100%,20%)`,10);
                     }
                     this.ang-=0.025;
                 }
@@ -53,25 +53,23 @@ export default class BossPhase0_1{
         }
         if(total < 10){
             for(let j = 0; j < 18; j++){
-                this.game.enemybullets.push(EnemyBullet0(this.game, 
+                CreateEnemyBullet0(this.game, 
                     this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/9),
                     this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/9),
                     (1+total/3), this.ang+j*Math.PI/9,
-                    `hsl(${20*j},100%,50%)`,"#fff",5));
+                    `hsl(${20*j},100%,50%)`,"#fff",5);
             }
             this.ang-=mth.lErp(0.15,-0.15,total/9);
             return;
         }
             if(Math.floor(total/4)-Math.floor((total-1)/4)){
                 for(let i = 0; i < 10; i++){
-                    let bullet = EnemyBullet0(this.game, 
+                    let bullet = CreateEnemyBullet0(this.game, 
                         this.boss.body.x + 20*Math.cos(this.ang+i*Math.PI/5),
                         this.boss.body.y + 20*Math.sin(this.ang+i*Math.PI/5),
                         3, this.ang+i*Math.PI/5,
                         "#00f");
                     bullet.ai = new BulletAISlowCurve(bullet,Math.PI/2*this.dir);
-                    this.game.enemybullets.push(bullet);
-                    
                 }
             }
             if(Math.floor((total-9)/20)-Math.floor((total-10)/20)){

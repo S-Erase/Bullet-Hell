@@ -1,9 +1,9 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
 import { doCirclesIntersect } from "/src/hitbox.js";
-import { EnemyBullet0, lifeStage } from "/src/Bullets/bullet.js";
+import { CreateEnemyBullet0, lifeStage } from "/src/Bullets/bullet.js";
 import { BulletAIAccelerate } from "/src/Bullets/bulletai.js";
-import Enemy from "/src/enemy.js";
+import Enemy from "/src/Enemy/enemy.js";
 
 class BulletAI{
     constructor(bullet, ang, time){
@@ -20,13 +20,13 @@ class BulletAI{
         if(this.accel){
             let life = this.game.level.levelTime-this.bullet.birthFrame;
             if(life == 0){
-                this.vel = this.startVel - this.startVel/this.time + this.startVel/(3*this.time**2);
+                this.vel = this.startVel;
             }
             else if(life < this.time){ //Cubic interpolation
                 this.vel -= this.startVel/this.time*2*(1-life/this.time);
             }
             else if(life == this.time){
-                this.vel = this.startVel;
+                this.vel = 3;
                 this.ang = this.newang;
                 this.accel = false;
             }
@@ -40,12 +40,6 @@ class BulletAI{
         else if (this.bullet.body.x < -this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.y > SCREEN_HEIGHT+this.bullet.body.radius){this.bullet.delete = true;}
         else if (this.bullet.body.x > SCREEN_WIDTH+this.bullet.body.radius){this.bullet.delete = true;}
-        else{
-            if(this.bullet.lifeStage == lifeStage.life && doCirclesIntersect(this.bullet.body, this.game.player.body)){
-                this.bullet.delete = true;
-                this.game.player.kill();
-            }
-        }
     }
 }
 
@@ -61,19 +55,18 @@ class EnemyAI{
         this.enemy.body.x += this.vx;
         this.enemy.body.y += this.vy;
         let life = this.game.level.levelTime-this.enemy.birthFrame;
-        if(life%15 == 0){
-            let bullet = EnemyBullet0(this.game, 
+        if(life%5 == 0){
+            let bullet = CreateEnemyBullet0(this.game, 
                 this.enemy.body.x, this.enemy.body.y,
-                5, mth.angleAtoB(this.enemy.body,this.game.player.body),
+                6, mth.angleAtoB(this.enemy.body,this.game.player.body),
                 "#f00");
             bullet.ai = new BulletAI(bullet,this.ang,60);
-            this.game.enemybullets.push(bullet);
-            this.ang++;
+            this.ang+=0.5;
 
-            if (this.enemy.body.y < -this.enemy.body.radius){this.enemy.health = 0;}
-            else if (this.enemy.body.x < -this.enemy.body.radius){this.enemy.health = 0;}
-            else if (this.enemy.body.y > SCREEN_HEIGHT+this.enemy.body.radius){this.enemy.health = 0;}
-            else if (this.enemy.body.x > SCREEN_WIDTH+this.enemy.body.radius){this.enemy.health = 0;}
+            if (this.enemy.body.y < -this.enemy.body.radius){this.enemy.delete = true;}
+            else if (this.enemy.body.x < -this.enemy.body.radius){this.enemy.delete = true;}
+            else if (this.enemy.body.y > SCREEN_HEIGHT+this.enemy.body.radius){this.enemy.delete = true;}
+            else if (this.enemy.body.x > SCREEN_WIDTH+this.enemy.body.radius){this.enemy.delete = true;}
         }
     }
 }
@@ -146,12 +139,11 @@ export default class BossPhase0_2{
         if(total < -10){
             if(total%4 == 0){
                 for(let j = 0; j < 18; j++){
-                    let bullet = EnemyBullet0(this.game, 
+                    let bullet = CreateEnemyBullet0(this.game, 
                         this.boss.body.x, this.boss.body.y,
                         25, mth.angleAtoB(this.boss.body,this.game.player.body)+j*Math.PI/9,
                         "#0f0","#060",10);
                     bullet.ai = new BulletAIAccelerate(bullet,2,30);
-                    this.game.enemybullets.push(bullet);
                 }
             }
             return;
@@ -163,19 +155,19 @@ export default class BossPhase0_2{
         if(total < 0){
             if(total%2 == 0){
                 for(let j = 0; j < 36; j++){
-                    this.game.enemybullets.push(EnemyBullet0(this.game, 
+                    CreateEnemyBullet0(this.game, 
                         this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/18),
                         this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/18),
                         15, this.ang+j*Math.PI/18,
-                        "#0f0","#fff",5));
+                        "#0f0","#fff",5);
                 }
             }
             return;
         }
-        if(total%20 == 0)
+        if(total%30 == 0)
         {
             this.ang += 2*Math.PI*mth.goldenRatio;
-            let enemy = new Enemy(this.game,-1,this.boss.body.x,this.boss.body.y);
+            let enemy = new Enemy(this.game,null,this.boss.body.x,this.boss.body.y);
             enemy.ai = new EnemyAI(enemy,this.ang);
             this.game.enemies.push(enemy);
             return;

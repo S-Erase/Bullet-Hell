@@ -1,6 +1,6 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "/src/screen.js";
 import * as mth from "/src/math.js";
-import { EnemyBullet0 } from "/src/Bullets/bullet.js";
+import { CreateEnemyBullet0 } from "/src/Bullets/bullet.js";
 
 export default class BossPhase0_0{
     constructor(game, ratio){
@@ -40,22 +40,22 @@ export default class BossPhase0_0{
             for(let i = 0; i < 20; i++){
                 if(total==6*i){
                     for(let j = 0; j < 24; j++){
-                        this.game.enemybullets.push(EnemyBullet0(this.game, 
+                        CreateEnemyBullet0(this.game, 
                             this.boss.body.x + 20*Math.cos(this.ang+j*Math.PI/12),
                             this.boss.body.y + 20*Math.sin(this.ang+j*Math.PI/12),
                             (1+i), this.ang+j*Math.PI/12,
-                            "#f00","#600",10));
+                            "#f00","#600",10);
                     }
                 }
             }
             if(total==6*19){
                 for(let i = 0; i < 15; i++){
                     for(let j = 0; j < 24; j++){
-                        this.game.enemybullets.push(EnemyBullet0(this.game, 
+                        CreateEnemyBullet0(this.game, 
                             this.boss.body.x + 20*Math.cos(this.ang+(j+0.5)*Math.PI/12),
                             this.boss.body.y + 20*Math.sin(this.ang+(j+0.5)*Math.PI/12),
                             (1+i), this.ang+(j+0.5)*Math.PI/12,
-                            "#f07","#603",8));
+                            "#f07","#603",8);
                     }
                 }
             }
@@ -65,11 +65,11 @@ export default class BossPhase0_0{
             if(Math.floor(total/20)-Math.floor((total-1)/20)){
                 for(let i = 0; i < 5; i++){
                     for(let j = 0; j < 5; j++){
-                        this.game.enemybullets.push(EnemyBullet0(this.game, 
+                        CreateEnemyBullet0(this.game, 
                         this.boss.body.x + 20*Math.cos(this.ang+2*i*Math.PI/5),
                         this.boss.body.y + 20*Math.sin(this.ang+2*i*Math.PI/5),
                         1+2*j/3, this.ang+2*i*Math.PI/5,
-                        `hsl(${72*i},100%,50%)`));
+                        `hsl(${72*i},100%,50%)`);
                     }
                 }
                 this.ang+=1;
