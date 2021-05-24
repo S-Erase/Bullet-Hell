@@ -8,8 +8,8 @@ The game is a simple shooter. All you need to do is make it to the end without d
 ## WIP Status
 At the moment, the game is severely limited in terms of design and gameplay. Below is a list of planned features.
 
-* Boss (2/5 phases complete)
-* A preceding level
+* Boss (4/5 phases complete)
+* A preceding level (1 phase complete)
 * Sound effects
 * Music
 * Improved graphics
@@ -21,6 +21,6 @@ The controls for this game are listed below the screen in the html page.
 
 * Arrow keys: Movement
 * Z key: OK, shoot
-* X key: Cancel, bomb (not yet implemented)
+* X key: Cancel, use bomb (not yet implemented)
 * Esc: Pause or resume
 * R key: Restart game if paused
