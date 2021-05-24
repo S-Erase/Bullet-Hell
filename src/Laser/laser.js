@@ -1,5 +1,7 @@
-import Line, { doesCircleIntersectLine } from "../hitbox.js";
-import CtsLaserAIDefault, {CtsLaserState} from "./laserai.js";
+import { SCREEN_WIDTH, SCREEN_HEIGHT, ctx } from "/src/screen.js";
+import { Line, doesCircleIntersectLine } from "../hitbox.js";
+import SourceLaserAIDefault, {SourceLaserState} from "./laserai.js";
+import { drawLaser } from "../shapes.js";
 
 export class PlayerLaser //Untested
 {
@@ -35,42 +37,27 @@ export class PlayerLaser //Untested
     }
 }
 
-export class EnemyCtsLaser //Untested
+export class EnemySourceLaser
 {
-    constructor(game,enemy,x,y,vx,vy, rad=5, life = 60, strokeStyle="#00f", fillStyle="#fff"){
-        this.body = new Line(x,y,0,0,rad);
+    constructor(game,enemy,dx,dy,vx,vy, rad=8, life = 60, strokeStyle="#00f", fillStyle="#fff"){
+        this.body = new Line(enemy.body.x + dx,enemy.body.y + dy,0,0,rad);
         this.vx = vx;
         this.vy = vy;
         this.game = game;
         this.fillStyle = fillStyle;
         this.strokeStyle = strokeStyle;
-        this.lifeStage = lifeStage.birth;
         this.delete = false;
         this.birthFrame = game.level.levelTime;
-        this.birthPhase = birthPhase;
         this.attached = true;
-        this.ai = new CtsLaserAIDefault(this,life,enemy);
+        this.ai = new SourceLaserAIDefault(this,life,enemy);
     }
     update(){
         if(this.ai !== null)
             this.ai.update();
     }
-    draw(){
-		ctx.beginPath();
-        let drawRadius = this.body.radius+3;
-        
-        ctx.lineWidth = drawRadius;
-        ctx.moveTo(this.body.x,this.body.y);
-        ctx.lineTo(this.body.x + this.body.dx,this.body.y + this.body.dy);
-		ctx.strokeStyle = this.strokeStyle;
-		ctx.stroke();
-        ctx.lineWidth = drawRadius/2;
-        ctx.moveTo(this.body.x,this.body.y);
-        ctx.lineTo(this.body.x + this.body.dx,this.body.y + this.body.dy);
-		ctx.strokeStyle = this.fillStyle;
-		ctx.stroke();
-
-        ctx.lineWidth = 1;
+    draw()
+    {
+        drawLaser(this);
     }
     kill(){
         if(this.attached){
@@ -83,7 +70,14 @@ export class EnemyCtsLaser //Untested
     deleteFun(){
         this.delete = true;
     }
-    intersectPlayer(){
+    intersectsPlayer(){
         return doesCircleIntersectLine(this.game.player.body, this.body);
     }
+}
+
+export function CreateEnemySourceLaser0(game,enemy,v,ang,rad = 8, life = 60, strokeStyle="#00f", fillStyle="#fff"){
+    let laser = new EnemySourceLaser(game,enemy, rad*Math.cos(ang), rad*Math.sin(ang),
+                                                    v*Math.cos(ang), v*Math.sin(ang), rad, life, strokeStyle, fillStyle);
+    game.enemybullets.push(laser);
+    return laser;
 }
