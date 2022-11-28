@@ -10,9 +10,6 @@ At the moment, the game is severely limited in terms of design and gameplay. Bel
 
 * Boss (4/5 phases complete)
 * A preceding level (1 phase complete)
-* Sound effects
-* Music
-* Improved graphics
 * Bombs (Will clear all bullets on screen and deal massive damage to enemies. Only two per life.)
 * Different shot types (Only has straight shot so far.)
 
